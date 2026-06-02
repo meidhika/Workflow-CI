@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+# Memperbaiki peringatan Node.js 20
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -28,7 +32,8 @@ jobs:
       - name: Run mlflow project
         run: |
           cd MLProject
-          mlflow run . -w "$(pwd)"
+          # Menambahkan --env-manager local agar MLflow tidak mencari program Conda
+          mlflow run . --env-manager local
           
       - name: Get latest MLflow run_id
         id: get_run_id
