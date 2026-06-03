@@ -6,13 +6,15 @@ from sklearn.metrics import accuracy_score
 
 def run_training():
     print("Memuat data...")
-    train_df = pd.read_csv("credit_scoring_preprocessing/train.csv")
-    test_df = pd.read_csv("credit_scoring_preprocessing/test.csv")
+    # Mengubah ke folder Banknote
+    train_df = pd.read_csv("banknote_preprocessing/train.csv")
+    test_df = pd.read_csv("banknote_preprocessing/test.csv")
     
-    X_train = train_df.drop(columns=['default'])
-    y_train = train_df['default']
-    X_test = test_df.drop(columns=['default'])
-    y_test = test_df['default']
+    # Mengubah target dari 'default' menjadi 'class'
+    X_train = train_df.drop(columns=['class'])
+    y_train = train_df['class']
+    X_test = test_df.drop(columns=['class'])
+    y_test = test_df['class']
     
     with mlflow.start_run():
         model = RandomForestClassifier(random_state=42, n_estimators=50)
@@ -24,7 +26,7 @@ def run_training():
         
         # MEMAKSA MLFLOW MENGGUNAKAN PYTHON 3.12.7 UNTUK DOCKER
         custom_env = {
-            "name": "credit-scoring-env",
+            "name": "banknote-env",  # Diubah menjadi banknote
             "channels": ["conda-forge"],
             "dependencies": [
                 "python=3.12.7",  # Kunci utamanya di sini
@@ -33,12 +35,12 @@ def run_training():
             ]
         }
         
-        # Menyimpan model beserta environment yang sudah ditentukan
         mlflow.sklearn.log_model(
-            sk_model=model, 
-            artifact_path="model", 
+            sk_model=model,
+            artifact_path="model",
             conda_env=custom_env
         )
+        print("Model berhasil disimpan ke dalam MLflow.")
 
 if __name__ == "__main__":
     run_training()
