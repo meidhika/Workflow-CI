@@ -1,4 +1,4 @@
-name: credit-scoring-env
+name: banknote-env
 channels:
   - conda-forge
 dependencies:

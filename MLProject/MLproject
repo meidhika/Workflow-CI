@@ -1,4 +1,4 @@
-name: Credit_Scoring_Pipeline
+name: Banknote_Pipeline
 
 conda_env: conda.yaml
 
